@@ -174,3 +174,55 @@ while [ $tcount -le 5 ]; do
 done
 
 echo "Files Created!"
+
+dpath="/home/MasterH/copysched.txt"
+echo "#!/bin/bash
+counter=1
+tcount=1
+range=50
+while [ \$counter -le 20 ]; do
+    while [ \$tcount -le 5 ]; do
+        result=\$RANDOM
+        result=\$((result%range +1))
+        cp /home/Hertz/task\$tcount/Hertz_task\$result.txt /home/Hertz-Intern\$counter/task\$tcount
+        chown Hertz:Hertz-Intern\$counter /home/Hertz-Intern\$counter/task\$tcount/Hertz_task\$result.txt
+        chmod +t /home/Hertz-Intern\$counter/task\$tcount/Hertz_task\$result.txt
+        tcount=\$((tcount+1))
+    done
+    tcount=1
+    counter=\$((counter+1))
+done
+
+counter=1
+tcount=1
+while [ \$counter -le 20 ]; do
+    while [ \$tcount -le 5 ]; do
+        result=\$RANDOM
+        result=\$((result%range +1))
+        cp /home/Heisenberg/task\$tcount/Heisenberg_task\$result.txt /home/Heisenberg-Intern\$counter/task\$tcount
+        chown Heisenberg:Heisenberg-Intern\$counter /home/Heisenberg-Intern\$counter/task\$tcount/Heisenberg_task\$result.txt
+        chmod +t /home/Heisenberg-Intern\$counter/task\$tcount/Heisenberg_task\$result.txt
+        tcount=\$((tcount+1))
+    done
+    tcount=1
+    counter=\$((counter+1))
+done
+
+counter=1
+tcount=1
+while [ \$counter -le 20 ]; do
+    while [ \$tcount -le 5 ]; do
+        result=\$RANDOM
+        result=\$((result%range +1))
+        cp /home/Holland/task\$tcount/Holland_task\$result.txt /home/Holland-Intern\$counter/task\$tcount
+        chown Holland:Holland-Intern\$counter /home/Holland-Intern\$counter/task\$tcount/Holland_task\$result.txt
+        chmod +t /home/Holland-Intern\$counter/task\$tcount/Holland_task\$result.txt
+        tcount=\$((tcount+1))
+    done
+    tcount=1
+    counter=\$((counter+1))
+done" >$dpath
+
+(crontab -l ; echo "@daily $dpath") | sort - | uniq - | crontab -
+
+echo "File Copying Scheduled!"
