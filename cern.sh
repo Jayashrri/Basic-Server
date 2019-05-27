@@ -269,3 +269,51 @@ done" >$dpath
 (crontab -l ; echo "@daily $dpath") | sort - | uniq - | crontab -
 
 echo "File Copying Scheduled!"
+
+#Get Server Logs from link
+wget -P /home/MasterH https://delta.nitt.edu/~deeraj/server_logs.txt
+
+#Create Success and Failure Files
+touch /home/Hertz/Success.txt
+touch /home/Hertz/Failure.txt
+
+touch /home/Heisenberg/Success.txt
+touch /home/Heisenberg/Failure.txt
+
+touch /home/Holland/Success.txt
+touch /home/Holland/Failure.txt
+
+counter=1
+while [ $counter -le 20 ]; do
+    touch /home/Hertz-Intern$counter/Success.txt
+    touch /home/Hertz-Intern$counter/Failure.txt
+    counter=$((counter+1))
+done
+
+counter=1
+while [ $counter -le 20 ]; do
+    touch /home/Heisenberg-Intern$counter/Success.txt
+    touch /home/Heisenberg-Intern$counter/Failure.txt
+    counter=$((counter+1))
+
+done
+
+counter=1
+while [ $counter -le 20 ]; do
+    touch /home/Holland-Intern$counter/Success.txt
+    touch /home/Holland-Intern$counter/Failure.txt
+    counter=$((counter+1))
+done
+
+#Read from Server Logs
+while read LINE; do
+    timestamp=`echo $LINE | cut -f1 -d" "`
+    user1=`echo $LINE | cut -f2 -d" "`
+    user2=`echo $LINE | cut -f4 -d" "`
+    ingroup=`groups $user1 | grep -c -w "$user2"`
+    if [[ $ingroup -eq 1 ]]; then
+        echo "$timestamp $user2" >> /home/$user1/Success.txt
+    else
+        echo "$timestamp $user2" >> /home/$user1/Failure.txt
+    fi
+done < /home/MasterH/server_logs.txt
